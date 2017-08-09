@@ -12,7 +12,7 @@ class Client
     public static function getClient()
     {
         return new \GuzzleHttp\Client([
-            'base_uri' => config('server'),
+            'base_uri' => config('openid.server'),
             'headers' => [
                 'Authorization' => 'Bearer ' . session('access_token')
             ]

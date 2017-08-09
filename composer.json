@@ -1,7 +1,7 @@
 {
     "name": "auth/openid-client",
     "description": "OpenId Client",
-    "version": "0.5",
+    "version": "0.6",
     "authors": [
         {
             "name": "Felipe da Silva Pinheiro",
@@ -9,7 +9,9 @@
         }
     ],
     "require": {
+        "php": ">=5.6.4",
         "guzzlehttp/guzzle": "^6.3",
+        "laravel/framework": "^5.4",
         "lcobucci/jwt": "^3.2"
     },
     "autoload": {

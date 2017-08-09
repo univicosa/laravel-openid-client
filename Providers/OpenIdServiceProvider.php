@@ -3,6 +3,7 @@
 namespace Modules\OpenId\Providers;
 
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Modules\OpenId\Guards\CustomSessionGuard;
 
@@ -47,7 +48,7 @@ class OpenIdServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../Config/config.php' => config_path('openid.php'),
-        ], 'config');
+        ], 'openid-config');
         $this->mergeConfigFrom(
             __DIR__.'/../Config/config.php', 'openid'
         );
@@ -55,7 +56,7 @@ class OpenIdServiceProvider extends ServiceProvider
 
     protected function registerGuard()
     {
-        \Auth::extend('openid', function ($app, $name, array $config) {
+        Auth::extend('openid', function ($app, $name, array $config) {
             return new CustomSessionGuard($app['session.store']);
         });
     }

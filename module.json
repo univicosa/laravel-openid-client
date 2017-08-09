@@ -1,0 +1,16 @@
+{
+    "name": "OpenId",
+    "alias": "openid",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\OpenId\\Providers\\OpenIdServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

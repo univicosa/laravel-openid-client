@@ -1,0 +1,20 @@
+{
+    "name": "auth/openid-client",
+    "description": "OpenId Client",
+    "version": "0.1",
+    "authors": [
+        {
+            "name": "Felipe da Silva Pinheiro",
+            "email": "felipepinheiro@univicosa.com.br"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "lcobucci/jwt": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\OpenId\\": ""
+        }
+    }
+}

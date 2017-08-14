@@ -140,8 +140,8 @@ class CustomSessionGuard implements Guard
             $user = new User([
                 'id' => $token->getClaim('sub'),
                 'name' => $token->getClaim('name'),
-                'gender' => $token->getClaim('gender')//,
-//                'roles' => explode(' ',  $token->getClaim('roles'))
+                'gender' => $token->getClaim('gender'),
+                'roles' => explode(' ',  $token->getClaim('roles'))
             ]);
 
             if ($user) {

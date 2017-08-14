@@ -1,7 +1,7 @@
 {
     "name": "auth/openid-client",
     "description": "OpenId Client",
-    "version": "0.6.3",
+    "version": "0.6.4",
     "authors": [
         {
             "name": "Felipe da Silva Pinheiro",

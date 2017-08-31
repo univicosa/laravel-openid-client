@@ -1,6 +1,6 @@
-#Cliente OpenId
+# Cliente OpenId
 
-##Instalação
+## Instalação
 
 Para instalar pelo Composer, primeiro execute:
 
@@ -24,7 +24,7 @@ Por fim execute o comando `require` a seguir:
 composer require auth/openid-client
 ```
 
-###Adicionar o _Service Provider_
+### Adicionar o _Service Provider_
 
 Em seguida registre o _service provider_ no arquivo `config/app.php`.
 

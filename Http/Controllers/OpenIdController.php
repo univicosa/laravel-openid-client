@@ -69,7 +69,7 @@ class OpenIdController extends Controller
             abort(500);
         }
 
-        return redirect()->intended('/');
+        return redirect()->intended();
     }
 
     /**

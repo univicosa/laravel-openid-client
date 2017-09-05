@@ -14,7 +14,8 @@ class Client
         return new \GuzzleHttp\Client([
             'base_uri' => config('openid.server'),
             'headers' => [
-                'Authorization' => 'Bearer ' . session('access_token')
+                'Authorization' => 'Bearer ' . session('access_token'),
+                'Accept' => 'application/json'
             ]
         ]);
     }

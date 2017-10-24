@@ -11,14 +11,6 @@ use Illuminate\Support\Facades\Request;
 class LoginController extends Controller
 {
     /**
-     * LoginController constructor.
-     */
-    public function __construct()
-    {
-        $this->middleware('auth')->only('logout');
-    }
-
-    /**
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function login()
@@ -38,10 +30,11 @@ class LoginController extends Controller
      */
     public function logout()
     {
-        Auth::guard()->logout();
+        if (Auth::check()) {
+            Auth::guard()->logout();
+            Request::session()->invalidate();
+        }
 
-        Request::session()->invalidate();
-
-        return response()->json('success');
+        return response()->json(['success' => true]);
     }
 }

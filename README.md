@@ -50,3 +50,13 @@ php artisan vendor:publish --tag=openid-config
 ```
 
 O arquivo de configuração `config/openid.php` será gerado.
+
+### Redirecionando para o login
+
+No arquivo `app\Exceptions\Handler.php` procurar pelo método `unauthenticated` (pode estar na classe pai, nesse caso basta sobreescrevê-lo), altere a rota do redirecionamento para:
+
+```php
+    config('server') . '/login?continue=' . env('APP_URL')
+```
+
+**Obs.:** Não esquecer de alterar a duração da sessão para 240 minutos.

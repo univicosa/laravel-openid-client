@@ -8,6 +8,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Psr\Http\Message\ResponseInterface;
 
 class OpenIdController extends Controller
 {
@@ -31,7 +32,7 @@ class OpenIdController extends Controller
                 case 'invalid_scope':
                 case 'server_error':
                 default:
-                    abort(500);
+                    abort($request->server->get('REDIRECT_STATUS', 500));
                     break;
             }
         }
@@ -49,36 +50,32 @@ class OpenIdController extends Controller
                     'code' => $code,
                 ],
             ]);
-
-            $response = json_decode($response->getBody());
-
             $this->checkError($response);
-
+            $response = json_decode($response->getBody());
             session([
                 'openid_token' => $response->id_token,
                 'access_token' => $response->access_token,
                 'refresh_token' => $response->refresh_token,
                 'expires_at' => Carbon::now()->addSeconds($response->expires_in)
             ]);
-
         } catch (\Exception $exception) {
             if ($exception instanceof ServerException || $exception instanceof ClientException) {
-                $response = json_decode($exception->getResponse()->getBody());
-                $this->checkError($response);
+                $this->checkError($exception->getResponse());
             }
-            abort(500);
+            abort($exception->getCode() !== 0 ? $exception->getCode() : 500);
         }
 
         return redirect()->intended();
     }
 
     /**
-     * @param $response
+     * @param ResponseInterface $response
      */
-    protected function checkError($response)
+    protected function checkError(ResponseInterface $response)
     {
-        if (isset($response->error)) {
-            switch ($response->error) {
+        $result = json_decode($response->getBody());
+        if (isset($result->error)) {
+            switch ($result->error) {
                 case 'invalid_request':
                 case 'invalid_client':
                 case 'invalid_grant':
@@ -86,7 +83,7 @@ class OpenIdController extends Controller
                 case 'unsupported_grant_type':
                 case 'invalid_scope':
                 default:
-                    abort(500);
+                    abort($response->getStatusCode());
                     break;
             }
         }

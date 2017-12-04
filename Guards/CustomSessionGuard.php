@@ -137,15 +137,28 @@ class CustomSessionGuard implements Guard
                 return;
             }
 
-            $user = new User([
-                'id' => $token->getClaim('sub'),
-                'name' => $token->getClaim('name'),
-                'email' => $token->getClaim('email'),
-                'roles' => explode(' ',  $token->getClaim('roles')),
-                'registries' => explode(' ', $token->getClaim('registries')),
-                'cpf' => $token->getClaim('cpf'),
-                'avatar' => $token->getClaim('avatar')
-            ]);
+            $user = new User();
+            if ($token->hasClaim('sub')) {
+                $user->id = $token->getClaim('sub');
+            }
+            if ($token->hasClaim('name')) {
+                $user->name = $token->getClaim('name');
+            }
+            if ($token->hasClaim('email')) {
+                $user->email = $token->getClaim('email');
+            }
+            if ($token->hasClaim('roles')) {
+                $user->roles = explode(' ',  $token->getClaim('roles'));
+            }
+            if ($token->hasClaim('registries')) {
+                $user->registries = explode(' ', $token->getClaim('registries'));
+            }
+            if ($token->hasClaim('cpf')) {
+                $user->cpf = $token->getClaim('cpf');
+            }
+            if ($token->hasClaim('avatar')) {
+                $user->avatar = $token->getClaim('avatar');
+            }
 
             if ($user) {
                 $this->fireAuthenticatedEvent($user);

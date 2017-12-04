@@ -5,7 +5,7 @@
 Para instalar pelo Composer, primeiro execute:
 
 ``` bash
-composer config repositories.bitbucket '{"type":"vcs", "url":"http://bitbucket.univicosa.com.br:7990/scm/auth/openid-client.git"}'
+composer config repositories.auth '{"type":"vcs", "url":"http://bitbucket.univicosa.com.br:7990/scm/auth/openid-client.git"}'
 ```
 
 Esse comando adiciona o repositório do Bitbucket ao `composer.json`.

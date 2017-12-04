@@ -1,7 +1,7 @@
 {
     "name": "auth/openid-client",
     "description": "OpenId Client",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "authors": [
         {
             "name": "Felipe da Silva Pinheiro",
@@ -17,6 +17,13 @@
     "autoload": {
         "psr-4": {
             "Modules\\OpenId\\": ""
+        }
+    }
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\OpenId\\Providers\\OpenIdServiceProvider"
+            ]
         }
     }
 }

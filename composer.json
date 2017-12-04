@@ -18,7 +18,7 @@
         "psr-4": {
             "Modules\\OpenId\\": ""
         }
-    }
+    },
     "extra": {
         "laravel": {
             "providers": [

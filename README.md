@@ -24,7 +24,7 @@ Por fim execute o comando `require` a seguir:
 composer require auth/openid-client
 ```
 
-### Adicionar o _Service Provider_
+### Adicionar o _Service Provider_ (caso necessário)
 
 Em seguida registre o _service provider_ no arquivo `config/app.php`.
 
@@ -60,3 +60,23 @@ No arquivo `app\Exceptions\Handler.php` procurar pelo método `unauthenticated` 
 ```
 
 **Obs.:** Não esquecer de alterar a duração da sessão para 240 minutos.
+
+### Alterando o 'guard'
+
+No arquivo `config\auth.php` altere o array `guards` para que fique como mostrado abaixo.
+
+```php
+    'guards' => [
+        'web' => [
+            'driver' => 'openid',
+            'provider' => NULL,
+        ],
+        /*
+         * ...
+         */
+    ]
+```
+
+### Chave pública
+
+É necessário copiar o arquivo da chave pública para a pasta `storage`.

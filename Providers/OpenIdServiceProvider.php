@@ -2,11 +2,10 @@
 
 namespace Modules\OpenId\Providers;
 
-
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Modules\OpenId\Guards\CustomSessionGuard;
-
+use Modules\OpenId\Guards\CustomTokenGuard;
+use Modules\OpenId\Services\Client;
 
 class OpenIdServiceProvider extends ServiceProvider
 {
@@ -25,8 +24,10 @@ class OpenIdServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerConfig();
-
         $this->loadRoutesFrom(__DIR__ . '/../Http/routes.php');
+        $this->app->singleton('openid', function ($app) {
+            return new Client();
+        });
     }
 
     /**
@@ -56,8 +57,12 @@ class OpenIdServiceProvider extends ServiceProvider
 
     protected function registerGuard()
     {
-        Auth::extend('openid', function ($app, $name, array $config) {
+        \Auth::extend('openid', function ($app, $name, array $config) {
             return new CustomSessionGuard($app['session.store']);
+        });
+
+        \Auth::extend('basic-api', function ($app, $name, array $config) {
+            return new CustomTokenGuard();
         });
     }
 }

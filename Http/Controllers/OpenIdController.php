@@ -36,9 +36,7 @@ class OpenIdController extends Controller
                     break;
             }
         }
-
         $code = $request->get('code');
-
         $http = new Client();
         try {
             $response = $http->post(config('openid.server') . '/oauth/token', [

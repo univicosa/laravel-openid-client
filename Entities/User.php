@@ -15,11 +15,6 @@ class User extends Authenticatable
 
     protected $keyType = 'uuid';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'id', 'name', 'roles', 'registries', 'cpf', 'email', 'avatar'
     ];

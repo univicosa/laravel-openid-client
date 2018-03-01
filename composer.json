@@ -1,7 +1,7 @@
 {
     "name": "auth/openid-client",
     "description": "OpenId Client",
-    "version": "0.7.1",
+    "version": "0.7.2",
     "authors": [
         {
             "name": "Felipe da Silva Pinheiro",
@@ -23,7 +23,10 @@
         "laravel": {
             "providers": [
                 "Modules\\OpenId\\Providers\\OpenIdServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "OpenIdClient": "Modules\\OpenId\\Facades\\OpenId"
+            }
         }
     }
 }

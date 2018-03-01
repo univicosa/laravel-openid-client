@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Modules\OpenId\Guards;
-
 
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Authenticated;
@@ -24,7 +22,6 @@ use Lcobucci\JWT\ValidationData;
 use Modules\OpenId\Entities\User;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
-
 
 class CustomSessionGuard implements Guard
 {
@@ -108,35 +105,28 @@ class CustomSessionGuard implements Guard
     public function user()
     {
         if ($this->loggedOut) {
-            return;
+            return NULL;
         }
-
-
         // If we've already retrieved the user for the current request we can just
         // return it back immediately. We do not want to fetch the user data on
         // every call to this method because that would be tremendously slow.
         if (! is_null($this->user)) {
             if ($this->session->get('expires_at') < Carbon::now()) {
                 $this->logout();
-                return;
+                return NULL;
             }
             return $this->user;
         }
-
         // First we will try to load the user using the identifier in the session if
         // one exists. Otherwise we will check for a "remember me" cookie in this
         // request, and if one exists, attempt to retrieve the user using that.
         $id = $this->session->get($this->getName());
-
         $user = null;
-
         if (! is_null($id)) {
             $token = $this->validateToken($id);
-
             if (!$token) {
-                return;
+                return NULL;
             }
-
             $user = new User();
             if ($token->hasClaim('sub')) {
                 $user->id = $token->getClaim('sub');
@@ -159,12 +149,10 @@ class CustomSessionGuard implements Guard
             if ($token->hasClaim('avatar')) {
                 $user->avatar = $token->getClaim('avatar');
             }
-
             if ($user) {
                 $this->fireAuthenticatedEvent($user);
             }
         }
-
 
         return $this->user = $user;
     }
@@ -176,19 +164,16 @@ class CustomSessionGuard implements Guard
     public function validateToken(string $id)
     {
         $token = (new Parser())->parse((string)$id);
-
         //Verifica se o token expirou
         if ($token->isExpired()) {
             return null;
         }
-
         //Verifica a assinatura
         $signer = new Sha256();
         $key = new Key('file://' . config('openid.key'));
         if (!$token->verify($signer, $key)) {
             return null;
         }
-
         //Verifica os dados
         $validation = new ValidationData();
         $validation->setIssuer(config('openid.server'));
@@ -208,17 +193,12 @@ class CustomSessionGuard implements Guard
     public function id()
     {
         if ($this->loggedOut) {
-            return;
-        }
-        $token = $this->validateToken((string)$this->session->get($this->getName()));
-
-        if (!$this->user() && !$token) {
-            return;
+            return NULL;
         }
 
         return $this->user()
             ? $this->user()->getAuthIdentifier()
-            : $token->getClaim('sub');
+            : $this->session->get($this->getName());
     }
 
     /**
@@ -230,7 +210,6 @@ class CustomSessionGuard implements Guard
     protected function updateSession($id)
     {
         $this->session->put($this->getName(), $id);
-
         $this->session->migrate(true);
     }
 
@@ -242,21 +221,17 @@ class CustomSessionGuard implements Guard
     public function logout()
     {
         $user = $this->user();
-
         // If we have an event dispatcher instance, we can fire off the logout event
         // so any further processing can be done. This allows the developer to be
         // listening for anytime a user signs out of this application manually.
         $this->clearUserDataFromStorage();
-
         if (isset($this->events)) {
             $this->events->dispatch(new Logout($user));
         }
-
         // Once we have fired the logout event we will clear the users out of memory
         // so they are no longer available as the user is no longer considered as
         // being signed into this application and should not be available here.
         $this->user = null;
-
         $this->loggedOut = true;
     }
 
@@ -428,9 +403,7 @@ class CustomSessionGuard implements Guard
     public function setUser(AuthenticatableContract $user)
     {
         $this->user = $user;
-
         $this->loggedOut = false;
-
         $this->fireAuthenticatedEvent($user);
 
         return $this;

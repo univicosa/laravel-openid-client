@@ -1,7 +1,7 @@
 {
     "name": "auth/openid-client",
     "description": "OpenId Client",
-    "version": "0.7.2",
+    "version": "0.7.3",
     "authors": [
         {
             "name": "Felipe da Silva Pinheiro",
@@ -25,7 +25,7 @@
                 "Modules\\OpenId\\Providers\\OpenIdServiceProvider"
             ],
             "aliases": {
-                "OpenIdClient": "Modules\\OpenId\\Facades\\OpenId"
+                "OpenId": "Modules\\OpenId\\Facades\\OpenId"
             }
         }
     }

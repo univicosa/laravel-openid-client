@@ -3,6 +3,8 @@
 namespace Modules\OpenId\Http\Controllers;
 
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 
 class LoginController extends Controller
 {
@@ -26,9 +28,9 @@ class LoginController extends Controller
      */
     public function logout()
     {
-        if (\Auth::check()) {
-            \Auth::guard()->logout();
-            \Request::session()->invalidate();
+        if (Auth::check()) {
+            Auth::guard()->logout();
+            Request::session()->invalidate();
         }
 
         return response()->json(['success' => true]);

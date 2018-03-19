@@ -14,6 +14,7 @@ class OpenIdController extends Controller
 {
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function callback(Request $request)
@@ -41,20 +42,20 @@ class OpenIdController extends Controller
         try {
             $response = $http->post(config('openid.server') . '/oauth/token', [
                 'form_params' => [
-                    'grant_type' => 'authorization_code',
-                    'client_id' => config('openid.client.id'),
+                    'grant_type'    => 'authorization_code',
+                    'client_id'     => config('openid.client.id'),
                     'client_secret' => config('openid.client.secret'),
-                    'redirect_uri' => route('openid.callback'),
-                    'code' => $code,
+                    'redirect_uri'  => route('openid.callback'),
+                    'code'          => $code,
                 ],
             ]);
             $this->checkError($response);
             $response = json_decode($response->getBody());
             session([
-                'openid_token' => $response->id_token,
-                'access_token' => $response->access_token,
+                'openid_token'  => $response->id_token,
+                'access_token'  => $response->access_token,
                 'refresh_token' => $response->refresh_token,
-                'expires_at' => Carbon::now()->addSeconds($response->expires_in)
+                'expires_at'    => Carbon::now()->addSeconds($response->expires_in),
             ]);
         } catch (\Exception $exception) {
             if ($exception instanceof ServerException || $exception instanceof ClientException) {

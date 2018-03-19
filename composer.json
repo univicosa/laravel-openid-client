@@ -1,32 +1,32 @@
 {
-    "name": "univicosa/laravel-openid-client",
-    "description": "OpenId Client",
-    "version": "0.7.3",
-    "authors": [
-        {
-            "name": "Felipe da Silva Pinheiro",
-            "email": "felipepinheiro@univicosa.com.br"
-        }
-    ],
-    "require": {
-        "php": ">=5.6.4",
-        "guzzlehttp/guzzle": "^6.3",
-        "laravel/framework": "^5.4",
-        "lcobucci/jwt": "^3.2"
-    },
-    "autoload": {
-        "psr-4": {
-            "Modules\\OpenId\\": ""
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Modules\\OpenId\\Providers\\OpenIdServiceProvider"
-            ],
-            "aliases": {
-                "OpenId": "Modules\\OpenId\\Facades\\OpenId"
-            }
-        }
+  "name": "univicosa/laravel-openid-client",
+  "description": "OpenId Client",
+  "version": "0.7.3",
+  "authors": [
+    {
+      "name": "Felipe da Silva Pinheiro",
+      "email": "felipepinheiro@univicosa.com.br"
     }
+  ],
+  "require": {
+    "php": ">=5.6.4",
+    "guzzlehttp/guzzle": "^6.3",
+    "laravel/framework": "^5.4",
+    "lcobucci/jwt": "^3.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Modules\\OpenId\\": ""
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Modules\\OpenId\\Providers\\OpenIdServiceProvider"
+      ],
+      "aliases": {
+        "OpenId": "Modules\\OpenId\\Facades\\OpenId"
+      }
+    }
+  }
 }

@@ -14,10 +14,10 @@ class LoginController extends Controller
     public function login()
     {
         $query = http_build_query([
-            'client_id' => config('openid.client.id'),
-            'redirect_uri' => route('openid.callback'),
+            'client_id'     => config('openid.client.id'),
+            'redirect_uri'  => route('openid.callback'),
             'response_type' => 'code',
-            'scope' => 'openid'
+            'scope'         => 'openid',
         ]);
 
         return redirect(config('openid.server') . "/oauth/authorize?$query");
@@ -33,6 +33,6 @@ class LoginController extends Controller
             Request::session()->invalidate();
         }
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => TRUE]);
     }
 }

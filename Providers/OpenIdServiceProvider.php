@@ -14,7 +14,7 @@ class OpenIdServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $defer = false;
+    protected $defer = FALSE;
 
     /**
      * Boot the application events.
@@ -48,10 +48,10 @@ class OpenIdServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('openid.php'),
+            __DIR__ . '/../Config/config.php' => config_path('openid.php'),
         ], 'openid-config');
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'openid'
+            __DIR__ . '/../Config/config.php', 'openid'
         );
     }
 

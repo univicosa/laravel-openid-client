@@ -1,5 +1,5 @@
 {
-    "name": "auth/openid-client",
+    "name": "univicosa/laravel-openid-client",
     "description": "OpenId Client",
     "version": "0.7.3",
     "authors": [

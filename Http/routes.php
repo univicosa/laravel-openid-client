@@ -1,5 +1,5 @@
 <?php
-/* commit */
+
 Route::middleware('web')->namespace('Modules\OpenId\Http\Controllers')->group(function()
 {
     Route::get('login', 'LoginController@login')->name('login');

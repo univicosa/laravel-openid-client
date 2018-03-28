@@ -1,7 +1,7 @@
 {
     "name": "univicosa/laravel-openid-client",
     "description": "OpenId Client",
-    "version": "0.7.3",
+    "version": "0.7.4",
     "authors": [
         {
             "name": "Felipe da Silva Pinheiro",

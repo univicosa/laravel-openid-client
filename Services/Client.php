@@ -17,4 +17,15 @@ class Client
             ]
         ]);
     }
+
+    public static function getServerClient()
+    {
+        return new \GuzzleHttp\Client([
+            'base_uri' => config('openid.server'),
+            'headers' => [
+                'ClientId' => config('openid.client.id'),
+                'ClientSecret' => config('openid.client.secret')
+            ]
+        ]);
+    }
 }

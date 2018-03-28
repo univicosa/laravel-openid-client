@@ -11,10 +11,10 @@ class Client
     {
         return new \GuzzleHttp\Client([
             'base_uri' => config('openid.server'),
-            'headers' => [
+            'headers'  => [
                 'Authorization' => 'Bearer ' . session('access_token'),
-                'Accept' => 'application/json'
-            ]
+                'Accept'        => 'application/json',
+            ],
         ]);
     }
 
@@ -24,7 +24,8 @@ class Client
             'base_uri' => config('openid.server'),
             'headers' => [
                 'ClientId' => config('openid.client.id'),
-                'ClientSecret' => config('openid.client.secret')
+                'ClientSecret' => config('openid.client.secret'),
+                'Accept'        => 'application/json',
             ]
         ]);
     }

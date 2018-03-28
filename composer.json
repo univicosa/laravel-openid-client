@@ -20,13 +20,13 @@
         }
     },
     "extra": {
-        "laravel": {
-            "providers": [
-                "Modules\\OpenId\\Providers\\OpenIdServiceProvider"
-            ],
-            "aliases": {
-                "OpenId": "Modules\\OpenId\\Facades\\OpenId"
-            }
+      "laravel": {
+        "providers": [
+          "Modules\\OpenId\\Providers\\OpenIdServiceProvider"
+        ],
+        "aliases": {
+          "OpenId": "Modules\\OpenId\\Facades\\OpenId"
         }
+      }
     }
 }

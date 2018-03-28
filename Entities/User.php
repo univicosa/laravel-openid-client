@@ -9,13 +9,13 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    protected $connection = null;
+    protected $connection = NULL;
 
-    public $incrementing = false;
+    public $incrementing = FALSE;
 
     protected $keyType = 'uuid';
 
     protected $fillable = [
-        'id', 'name', 'roles', 'registries', 'cpf', 'email', 'avatar'
+        'id', 'name', 'roles', 'registries', 'cpf', 'email', 'avatar',
     ];
 }

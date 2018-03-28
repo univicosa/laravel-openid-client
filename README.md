@@ -1,71 +1,50 @@
-# Cliente OpenId
+# Univiçosa Laravel OpenId Client
 
-## Instalação
+| **Laravel**  |  **laravel-openid-client** |
+|------|------|
+| 5.4  | ^0.7.3  |
+| 5.5  | ^0.7.3  |
+| 5.6  | ^0.7.3  |
 
-Para instalar pelo Composer, primeiro execute:
+`univicosa/laravel-openid-client` is a Laravel package which created to integrate the Oauth server to ours Laravel project's that require authentication.
 
-``` bash
-composer config repositories.auth '{"type":"vcs", "url":"http://bitbucket.univicosa.com.br:7990/scm/auth/openid-client.git"}'
+## Install
+
+Installation using composer:
+
+```
+composer require univicosa/laravel-openid-client
 ```
 
-Esse comando adiciona o repositório do Bitbucket ao `composer.json`.
+And add the service provider in `config/app.php`:
 
-Em seguida execute o seguinte comando:
-
-``` bash
-composer config secure-http false
+```
+Modules\OpenId\Providers\OpenIdServiceProvider::class
 ```
 
-Esse comando configura o composer para aceitar conexões via `http`.
+Publish the package's configuration file by running:
 
-Por fim execute o comando `require` a seguir:
-
-```bash
-composer require auth/openid-client
 ```
-
-### Adicionar o _Service Provider_ (caso necessário)
-
-Em seguida registre o _service provider_ no arquivo `config/app.php`.
-
-```php
-'providers' => [
-    
-    /*
-     *    ...
-     */
-     
-    Modules\OpenId\Providers\OpenIdServiceProvider::class,
-    
-    /*
-     *    ...
-     */
-],
-```
-
-Para publicar o arquivo de configuração execute o seguinte comando:
-
-```bash
 php artisan vendor:publish --tag=openid-config
 ```
 
-O arquivo de configuração `config/openid.php` será gerado.
+The file `config/openid.php` will be generated.
 
-### Redirecionando para o login
+## Redirecting to _Login_
 
-No arquivo `app\Exceptions\Handler.php` procurar pelo método `unauthenticated` (pode estar na classe pai, nesse caso basta sobreescrevê-lo), altere a rota do redirecionamento para:
+In the file `app\Exceptions\Handler.php` find or overwrite the `unauthenticated` method and change de redirect route to:
 
 ```php
     config('server') . '/login?continue=' . env('APP_URL')
 ```
 
-**Obs.:** Não esquecer de alterar a duração da sessão para 240 minutos.
+**PS:** Don't forget change the session time to (minutes) you want.
 
-### Alterando o 'guard'
+## Changing the _Guard_
 
-No arquivo `config\auth.php` altere o array `guards` para que fique como mostrado abaixo.
+change the file `config\auth.php` to:
 
-```php
+```
     'guards' => [
         'web' => [
             'driver' => 'openid',
@@ -77,6 +56,10 @@ No arquivo `config\auth.php` altere o array `guards` para que fique como mostrad
     ]
 ```
 
-### Chave pública
+## Oauth `public key`
 
-É necessário copiar o arquivo da chave pública para a pasta `storage`.
+Copy the `oauth public key` to `storage` folder of your project.
+
+## Facades
+
+The client methods are available under the facade OpenId

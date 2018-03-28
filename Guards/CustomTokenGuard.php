@@ -24,12 +24,12 @@ class CustomTokenGuard implements Guard
         // If we've already retrieved the user for the current request we can just
         // return it back immediately. We do not want to fetch the user data on
         // every call to this method because that would be tremendously slow.
-        if (! is_null($this->user)) {
+        if (!is_null($this->user)) {
             return $this->user;
         }
-        $user = null;
+        $user = NULL;
         $token = $this->getTokenForRequest();
-        if (! empty($token)) {
+        if (!empty($token)) {
             $user = $this->retrieveByToken($token);
         }
 
@@ -40,11 +40,12 @@ class CustomTokenGuard implements Guard
      * Validate a user's credentials.
      *
      * @param  array $credentials
+     *
      * @return bool
      */
     public function validate(array $credentials = [])
     {
-        return false;
+        return FALSE;
     }
 
     /**
@@ -57,6 +58,7 @@ class CustomTokenGuard implements Guard
 
     /**
      * @param string $token
+     *
      * @return User|null
      */
     private function retrieveByToken(string $token)
@@ -76,7 +78,7 @@ class CustomTokenGuard implements Guard
             $user->email = $token->getClaim('email');
         }
         if ($token->hasClaim('roles')) {
-            $user->roles = explode(' ',  $token->getClaim('roles'));
+            $user->roles = explode(' ', $token->getClaim('roles'));
         }
         if ($token->hasClaim('registries')) {
             $user->registries = explode(' ', $token->getClaim('registries'));
@@ -93,6 +95,7 @@ class CustomTokenGuard implements Guard
 
     /**
      * @param string $id
+     *
      * @return \Lcobucci\JWT\Token|null
      */
     private function validateToken(string $id)
@@ -100,20 +103,20 @@ class CustomTokenGuard implements Guard
         $token = (new Parser())->parse((string)$id);
         //Verifica se o token expirou
         if ($token->isExpired()) {
-            return null;
+            return NULL;
         }
         //Verifica a assinatura
         $signer = new Sha256();
         $key = new Key('file://' . config('openid.key'));
         if (!$token->verify($signer, $key)) {
-            return null;
+            return NULL;
         }
         //Verifica os dados
         $validation = new ValidationData();
         $validation->setIssuer(config('openid.server'));
         $validation->setAudience(config('openid.client.id'));
         if (!$token->validate($validation)) {
-            return null;
+            return NULL;
         }
 
         return $token;

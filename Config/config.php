@@ -2,29 +2,29 @@
 
 return [
     /*
-     | Caminho para o arquivo da chave pública
+     | path of the public key
      */
-    'key' => env('KEY_PATH', storage_path('oauth-public.key')),
+    'key'    => env('KEY_PATH', storage_path('oauth-public.key')),
 
     /*
-     | URL do servidor OpenId
+     | OpenID server URL
      */
     'server' => env('AUTH_SERVER', 'https://devauth.univicosa.com.br'),
 
     /*
-     | Dados do cliente OpenId
+     | OpenID client data
      */
     'client' => [
 
         /*
-         | Id do cliente
+         | Client ID
          */
-        'id' => env('CLIENT_ID'),
+        'id'     => env('CLIENT_ID'),
 
         /*
-         | Senha do cliente
+         | Client secret
          */
-        'secret' => env('CLIENT_SECRET')
-    ]
+        'secret' => env('CLIENT_SECRET'),
+    ],
 
 ];

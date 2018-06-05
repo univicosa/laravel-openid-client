@@ -9,7 +9,6 @@ namespace Modules\OpenId\Http\ViewComposers;
 
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 class UserSystemsComposer
@@ -71,15 +70,12 @@ class UserSystemsComposer
      */
     private function systems(): array
     {
-        if (!Session::has('systems') && Auth::check()){
-            $client = \OpenId::getClient();
-
-            $response = $client->get('api/systemsByUser');
-
-            $response = json_decode($response->getBody() , true);
-            Session::put($response);
+        if (!\Session::has('systems') && Auth::check()) {
+            \Session::put(\Oauth2::getSystems());
         }
 
         return \Session::get('systems');
     }
+
+
 }

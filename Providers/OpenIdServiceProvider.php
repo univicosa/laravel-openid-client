@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Blade;
 use Modules\OpenId\Guards\CustomSessionGuard;
 use Modules\OpenId\Guards\CustomTokenGuard;
+use Modules\OpenId\Services\Api;
 use Modules\OpenId\Services\Client;
 
 class OpenIdServiceProvider extends ServiceProvider
@@ -34,6 +35,10 @@ class OpenIdServiceProvider extends ServiceProvider
 
         $this->app->singleton('openid', function ($app) {
             return new Client();
+        });
+
+        $this->app->singleton('oauth2', function ($app) {
+            return new Api();
         });
     }
 
@@ -100,6 +105,12 @@ class OpenIdServiceProvider extends ServiceProvider
     {
         Blade::directive('openidComponents', function () {
             return "<?php echo view('openid::menu')->render(); ?>";
+        });
+
+        Blade::directive('login', function ($route) {
+            if(\Auth::check()) return route($route);
+
+            return "<?php echo config('openid.server') . '/login?' . http_build_query(['continue' => route($route)]); ?>";
         });
     }
 }

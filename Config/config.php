@@ -28,4 +28,5 @@ return [
         'secret' => env('CLIENT_SECRET'),
     ],
 
+    'api-version' => env('API_VERSION', 'v1'),
 ];

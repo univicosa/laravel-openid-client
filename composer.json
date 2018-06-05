@@ -30,7 +30,8 @@
         "Modules\\OpenId\\Providers\\OpenIdServiceProvider"
       ],
       "aliases": {
-        "OpenId": "Modules\\OpenId\\Facades\\OpenId"
+        "OpenId": "Modules\\OpenId\\Facades\\OpenId",
+        "Oauth2": "Modules\\OpenId\\Facades\\Oauth2"
       }
     }
   }

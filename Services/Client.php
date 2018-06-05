@@ -18,6 +18,9 @@ class Client
         ]);
     }
 
+    /**
+     * @return \GuzzleHttp\Client
+     */
     public static function getServerClient()
     {
         return new \GuzzleHttp\Client([

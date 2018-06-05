@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'namespace' => 'openid',
     /*
      | path of the public key
      */

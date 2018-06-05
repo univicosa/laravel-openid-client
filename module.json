@@ -1,8 +1,8 @@
 {
   "name": "OpenId",
   "alias": "openid",
-  "description": "",
-  "keywords": [],
+  "description": "OpenId client for the Univiçosa authenticated projects.",
+  "keywords": ["openid", "oauth2", "laravel", "passport"],
   "active": 1,
   "order": 0,
   "providers": [

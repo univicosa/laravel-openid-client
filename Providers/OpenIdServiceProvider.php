@@ -3,6 +3,8 @@
 namespace Modules\OpenId\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Blade;
 use Modules\OpenId\Guards\CustomSessionGuard;
 use Modules\OpenId\Guards\CustomTokenGuard;
 use Modules\OpenId\Services\Client;
@@ -24,7 +26,12 @@ class OpenIdServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerConfig();
+        $this->registerViewComposers();
+
         $this->loadRoutesFrom(__DIR__ . '/../Http/routes.php');
+        $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', config('openid.namespace'));
+        $this->loadViewsFrom(__DIR__ . '/../Resources/views', config('openid.namespace'));
+
         $this->app->singleton('openid', function ($app) {
             return new Client();
         });
@@ -38,6 +45,7 @@ class OpenIdServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerGuard();
+        $this->registerBladeDirectives();
     }
 
     /**
@@ -55,6 +63,11 @@ class OpenIdServiceProvider extends ServiceProvider
         );
     }
 
+    /**
+     * Register Guard Session
+     *
+     * @return void
+     */
     protected function registerGuard()
     {
         \Auth::extend('openid', function ($app, $name, array $config) {
@@ -63,6 +76,30 @@ class OpenIdServiceProvider extends ServiceProvider
 
         \Auth::extend('basic-api', function ($app, $name, array $config) {
             return new CustomTokenGuard();
+        });
+    }
+
+    /**
+     * Register ViewComposers
+     *
+     * @return void
+     */
+    protected function registerViewComposers()
+    {
+        View::composer(
+            'openid::menu', 'Modules\OpenId\Http\ViewComposers\UserSystemsComposer'
+        );
+    }
+
+    /**
+     * Register Blade Directives
+     *
+     * @return void
+     */
+    protected function registerBladeDirectives()
+    {
+        Blade::directive('openidComponents', function () {
+            return "<?php echo view('openid::menu')->render(); ?>";
         });
     }
 }

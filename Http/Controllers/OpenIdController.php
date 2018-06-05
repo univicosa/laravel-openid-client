@@ -37,8 +37,10 @@ class OpenIdController extends Controller
                     break;
             }
         }
+
         $code = $request->get('code');
         $http = new Client();
+
         try {
             $response = $http->post(config('openid.server') . '/oauth/token', [
                 'form_params' => [
@@ -49,8 +51,10 @@ class OpenIdController extends Controller
                     'code'          => $code,
                 ],
             ]);
+
             $this->checkError($response);
             $response = json_decode($response->getBody());
+
             session([
                 'openid_token'  => $response->id_token,
                 'access_token'  => $response->access_token,
@@ -61,6 +65,7 @@ class OpenIdController extends Controller
             if ($exception instanceof ServerException || $exception instanceof ClientException) {
                 $this->checkError($exception->getResponse());
             }
+
             abort($exception->getCode() !== 0 ? $exception->getCode() : 500);
         }
 
@@ -73,6 +78,7 @@ class OpenIdController extends Controller
     protected function checkError(ResponseInterface $response)
     {
         $result = json_decode($response->getBody());
+
         if (isset($result->error)) {
             switch ($result->error) {
                 case 'invalid_request':

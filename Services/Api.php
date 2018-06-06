@@ -23,7 +23,7 @@ class Api
     private static $initialized = FALSE;
 
     /**
-     * Class constructor
+     * Static class constructor
      */
     private static function initialize()
     {
@@ -35,6 +35,8 @@ class Api
     }
 
     /**
+     * @api (GET '/api/{version}/system')
+     *
      * @return array
      */
     public static function getSystems()
@@ -43,6 +45,8 @@ class Api
     }
 
     /**
+     * @api (GET '/api/{version}/system/roles')
+     *
      * @return array
      */
     public static function getSystemRoles()
@@ -51,6 +55,8 @@ class Api
     }
 
     /**
+     * @api (GET '/api/{version}/user')
+     *
      * @return array
      */
     public static function getUser()
@@ -59,6 +65,20 @@ class Api
     }
 
     /**
+     * @api (POST '/api/{version}/user/cpf')
+     *
+     * @param string $cpf
+     *
+     * @return array
+     */
+    public static function getUserByCpf(string $cpf)
+    {
+        return self::getResponse('user/cpf', ['cpf' => $cpf]);
+    }
+
+    /**
+     * @api (GET '/api/{version}/user/systems')
+     *
      * @return array
      */
     public static function getUserSystems()
@@ -67,6 +87,8 @@ class Api
     }
 
     /**
+     * @api (GET '/api/{version}/user/permissions')
+     *
      * @return array
      */
     public static function getUserPermissions()
@@ -75,14 +97,29 @@ class Api
     }
 
     /**
+     * @api (POST '/api/{version}/user/permission')
      *
+     * @param string $cpf
+     * @param string $role
+     * @param string $expires_at
+     *
+     * @return array
      */
-    public static function createUserPermission()
+    public static function setUserPermission(string $cpf, string $role, string $expires_at = '')
     {
-        //
+        $params = [
+            'user' => $cpf,
+            'role' => $role,
+        ];
+
+        if ($expires_at !== '') $params['expires_at'] = date('Y-m-d', strtotime($expires_at));
+
+        return self::postData('user/permission', $params);
     }
 
     /**
+     * @api (GET '/api/{version}/address/states')
+     *
      * @return array
      */
     public static function getStates()
@@ -91,6 +128,8 @@ class Api
     }
 
     /**
+     * @api (GET '/api/{version}/address/cities/{state}')
+     *
      * @param string $state
      *
      * @return array
@@ -101,6 +140,8 @@ class Api
     }
 
     /**
+     * @api (GET '/api/{version}/address/filled')
+     *
      * @return array
      */
     public static function isAddressFilled()
@@ -109,15 +150,54 @@ class Api
     }
 
     /**
-     * @param string $uri
+     * @api (POST '/api/{version}/address')
+     * @example
+     *
+     * @param array $data Requires 'zip', 'street', 'number', 'complement', 'district' and 'city' keys
      *
      * @return array
      */
-    private static function getResponse(string $uri): array
+    public static function setAddress(array $data)
+    {
+        $params = array_only($data, ['zip', 'street', 'number', 'complement', 'district', 'city']);
+
+        return self::postData('address', $params);
+    }
+
+    /**
+     * @param string $uri
+     * @param array  $params
+     *
+     * @return array
+     */
+    private static function getResponse(string $uri, array $params = []): array
     {
         self::initialize();
 
-        $response = self::$client->get('api/' . self::$version . '/' . $uri);
+        if(empty($params)) {
+            $response = self::$client->get('api/' . self::$version . '/' . $uri);
+        } else {
+            $response = self::$client->post('api/' . self::$version . '/' . $uri, [
+                'form_params' => $params,
+            ]);
+        }
+
+        return json_decode($response->getBody(), TRUE);
+    }
+
+    /**
+     * @param string $uri
+     * @param array  $data
+     *
+     * @return array
+     */
+    private static function postData(string $uri, array $data): array
+    {
+        self::initialize();
+
+        $response = self::$client->post('api/' . self::$version . '/' . $uri, [
+            'form_params' => $data,
+        ]);
 
         return json_decode($response->getBody(), TRUE);
     }

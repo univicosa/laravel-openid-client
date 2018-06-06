@@ -108,7 +108,7 @@ class OpenIdServiceProvider extends ServiceProvider
         });
 
         Blade::directive('login', function ($route) {
-            if(\Auth::check()) return route($route);
+            if(\Auth::check()) return "<?php echo route($route); ?>";
 
             return "<?php echo config('openid.server') . '/login?' . http_build_query(['continue' => route($route)]); ?>";
         });

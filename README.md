@@ -1,11 +1,5 @@
 # Univiçosa Laravel OpenId Client
 
-| **Laravel**  |  **laravel-openid-client** |
-|------|------|
-| 5.4  | ^0.7.3  |
-| 5.5  | ^0.7.3  |
-| 5.6  | ^0.7.3  |
-
 `univicosa/laravel-openid-client` is a Laravel package which created to integrate the Oauth server to ours Laravel project's that requires authentication.
 
 ## Install
@@ -16,7 +10,7 @@ Installation using composer:
 composer require univicosa/laravel-openid-client
 ```
 
-For laravel versions < 5.5 add the service provider in `config/app.php`:
+For Laravel versions < 5.5 add the service provider in `config/app.php`:
 
 ```
 Modules\OpenId\Providers\OpenIdServiceProvider::class
@@ -30,7 +24,11 @@ php artisan vendor:publish --tag=openid-config
 
 The file `config/openid.php` will be generated.
 
-## Redirecting to _Login_
+### Oauth `public key`
+
+Your system need the `oauth public key` to connect and communicate with the Oauth Server.So you need to copy the public key file to `storage` folder of your project.
+
+### Redirecting to _Login_
 
 In the file `app\Exceptions\Handler.php` find or overwrite the `unauthenticated` method and change the redirect route to:
 
@@ -38,9 +36,11 @@ In the file `app\Exceptions\Handler.php` find or overwrite the `unauthenticated`
 config('openid.server') . '/login?continue=' . env('APP_URL')
 ```
 
-**PS:** Don't forget change the `SESSION_LIFETIME` in the .env file to the time in minutes you want to keep the logged session.
+### _Session Lifetime_
 
-## For change the _Guard_
+Set a variable called `SESSION_LIFETIME` in the `.env` file and define it to the time in minutes you want to keep the logged session. The max time of the Oauth Server keeps the session is 240 minutes (4 hours).
+
+### For change the _Guard_
 
 change the file `config\auth.php` to:
 
@@ -56,17 +56,99 @@ change the file `config\auth.php` to:
 ]
 ```
 
-## Oauth `public key`
-
-Copy the `oauth public key` to `storage` folder of your project.
-
 ## _Facades_
 
-The client methods are available under the facade OpenId.
+The client methods are available under the facade **\OpenId**.
 
-The authentication methods like the verifier `\Auth::check()` are available under the Facade `\Illuminate\Support\Facades\Auth`;
+The authentication methods like the verifier `\Auth::check()` are available under the Facade **\Illuminate\Support\Facades\Auth**;
 
-The facade Oauth2 provides all helpers needed to get and post data from the Oauth Server.
+The facade **\Oauth2** provides all helpers needed to get and post data from the Oauth Server.
+
+### \Ouath2 methods available
+
+```php
+@method \Oauth2::getSystems(): array
+@api GET '/api/{version}/system'
+
+@return array With Systems available in Oauth Server
+```
+
+```php
+@method \Oauth2::getSystemRoles(): array
+@api GET '/api/{version}/system/roles'
+
+@return array With System givable roles
+```
+
+```php
+@method \Oauth2::getUser(): array
+@api GET '/api/{version}/user'
+
+@return array With logged user data
+```
+
+```php
+@method \Oauth2::getUserByCpf(string $cpf): array
+@api POST '/api/{version}/user/cpf'
+
+@return array With the data of user owner of document given
+```
+
+```php
+@method \Oauth2::getUserSystems(): array
+@api GET '/api/{version}/user/systems'
+
+@return array With the systems that the user is allowed to access
+```
+
+```php
+@method \Oauth2::getUserPermissions(): array
+@api GET '/api/{version}/user/permissions'
+
+@return array With the roles that the logged user has in the request owner
+```
+
+```php
+@method \Oauth2::getGenders(): array
+@api GET '/api/{version}/profile/genders'
+
+@return array With th data of all genders available for select on the Oauth Server
+```
+
+```php
+@method \Oauth2::setUserPermission(string $cpf, string $role, string $expires_at = ''): array
+@api POST '/api/{version}/user/permission'
+
+@return array with the response of Post action
+```
+
+```php
+@method \Oauth2::getStates(): array
+@api GET '/api/{version}/address/states'
+
+@return array With the data of all Brazilian states present on the Oauth Server
+```
+
+```php
+@method \Oauth2::getCities(string $state): array
+@api GET '/api/{version}/address/cities/{state}'
+
+@return array With the data of all Brazilian cities according to the state given present on the Oauth Server
+```
+
+```php
+@method \Oauth2::setAddress(array $data): array
+@api POST '/api/{version}/address'
+
+@return array with the response of Post action
+```
+
+```php
+@method \Oauth2::setProfile(array $data): array
+@api POST '/api/{version}/profile'
+
+@return array with the response of Post action
+```
 
 ## _View components_
 
@@ -85,5 +167,5 @@ The dynamic route from Oauth system can redirect the user back to the source usi
 The following example will be redirect back to the source after the user executes the actions needed in the Oauth Service page:
 
 ```php
-config('openid.server') . '{$ouath_service_page}?' . http_build_query(['continue' => {$route_to_redirect_back}])
+config('openid.server') . '{ouath_service_page}?' . http_build_query(['continue' => {route_to_redirect_back}])
 ```

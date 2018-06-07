@@ -25,11 +25,28 @@ class Client
     {
         return new \GuzzleHttp\Client([
             'base_uri' => config('openid.server'),
-            'headers' => [
-                'ClientId' => config('openid.client.id'),
+            'headers'  => [
+                'ClientId'     => config('openid.client.id'),
                 'ClientSecret' => config('openid.client.secret'),
-                'Accept'        => 'application/json',
-            ]
+                'Accept'       => 'application/json',
+            ],
         ]);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    public static function createUser(array $data): array
+    {
+        $client = self::getServerClient();
+        $params = array_only($data, ['name', 'email', 'cpf']);
+
+        $response = $client->post('api/' . config('openid.api-version') . '/user', [
+            'form_params' => $params,
+        ]);
+
+        return json_decode($response->getBody(), TRUE);
     }
 }

@@ -35,9 +35,9 @@ class Api
     }
 
     /**
-     * @api (GET '/api/{version}/system')
+     * @api GET '/api/{version}/system'
      *
-     * @return array
+     * @return array With Systems available in Oauth Server
      */
     public static function getSystems()
     {
@@ -45,9 +45,9 @@ class Api
     }
 
     /**
-     * @api (GET '/api/{version}/system/roles')
+     * @api GET '/api/{version}/system/roles'
      *
-     * @return array
+     * @return array With System givable roles
      */
     public static function getSystemRoles()
     {
@@ -55,9 +55,9 @@ class Api
     }
 
     /**
-     * @api (GET '/api/{version}/user')
+     * @api GET '/api/{version}/user'
      *
-     * @return array
+     * @return array With logged user data
      */
     public static function getUser()
     {
@@ -65,11 +65,11 @@ class Api
     }
 
     /**
-     * @api (POST '/api/{version}/user/cpf')
+     * @api POST '/api/{version}/user/cpf'
      *
      * @param string $cpf
      *
-     * @return array
+     * @return array With the data of user owner of document given
      */
     public static function getUserByCpf(string $cpf)
     {
@@ -77,9 +77,9 @@ class Api
     }
 
     /**
-     * @api (GET '/api/{version}/user/systems')
+     * @api GET '/api/{version}/user/systems'
      *
-     * @return array
+     * @return array With the systems that the user is allowed to access
      */
     public static function getUserSystems()
     {
@@ -87,9 +87,9 @@ class Api
     }
 
     /**
-     * @api (GET '/api/{version}/user/permissions')
+     * @api GET '/api/{version}/user/permissions'
      *
-     * @return array
+     * @return array With the roles that the logged user has in the request owner
      */
     public static function getUserPermissions()
     {
@@ -97,13 +97,23 @@ class Api
     }
 
     /**
-     * @api (POST '/api/{version}/user/permission')
+     * @api GET '/api/{version}/user/genders'
+     *
+     * @return array With the data of all genders available for select on the Oauth Server
+     */
+    public static function getGenders()
+    {
+        return self::getResponse('profile/genders');
+    }
+
+    /**
+     * @api POST '/api/{version}/user/permission'
      *
      * @param string $cpf
      * @param string $role
      * @param string $expires_at
      *
-     * @return array
+     * @return array with the response of Post action
      */
     public static function setUserPermission(string $cpf, string $role, string $expires_at = '')
     {
@@ -118,9 +128,23 @@ class Api
     }
 
     /**
-     * @api (GET '/api/{version}/address/states')
+     * @api POST '/api/{version}/user/profile'
      *
-     * @return array
+     * @param array $data Requires 'name', 'social_name', 'gender', 'birthday_date', 'identity' and 'phones' keys
+     *
+     * @return array with the response of Post action
+     */
+    public static function setProfile(array $data)
+    {
+        $params = array_only($data, ['name', 'social_name', 'gender', 'birthday_date', 'identity', 'phones']);
+
+        return self::postData('profile', $params);
+    }
+
+    /**
+     * @api GET '/api/{version}/address/states'
+     *
+     * @return array With the data of all Brazilian states present on the Oauth Server
      */
     public static function getStates()
     {
@@ -128,11 +152,11 @@ class Api
     }
 
     /**
-     * @api (GET '/api/{version}/address/cities/{state}')
+     * @api GET '/api/{version}/address/cities/{state}'
      *
      * @param string $state
      *
-     * @return array
+     * @return array With the data of all Brazilian cities according to the state given present on the Oauth Server
      */
     public static function getCities(string $state)
     {
@@ -140,9 +164,9 @@ class Api
     }
 
     /**
-     * @api (GET '/api/{version}/address/filled')
+     * @api GET '/api/{version}/address/filled'
      *
-     * @return array
+     * @return array With the Boolean response if the user address data is populated on the Oauth Server
      */
     public static function isAddressFilled()
     {
@@ -150,12 +174,11 @@ class Api
     }
 
     /**
-     * @api (POST '/api/{version}/address')
-     * @example
+     * @api POST '/api/{version}/address'
      *
      * @param array $data Requires 'zip', 'street', 'number', 'complement', 'district' and 'city' keys
      *
-     * @return array
+     * @return array with the response of Post action
      */
     public static function setAddress(array $data)
     {
@@ -174,7 +197,7 @@ class Api
     {
         self::initialize();
 
-        if(empty($params)) {
+        if (empty($params)) {
             $response = self::$client->get('api/' . self::$version . '/' . $uri);
         } else {
             $response = self::$client->post('api/' . self::$version . '/' . $uri, [

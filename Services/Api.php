@@ -65,6 +65,16 @@ class Api
     }
 
     /**
+     * @api GET '/api/{version}/profile'
+     *
+     * @return array With logged user profiles
+     */
+    public static function getUserProfiles()
+    {
+        return self::getResponse('profile');
+    }
+
+    /**
      * @api POST '/api/{version}/user/cpf'
      *
      * @param string $cpf

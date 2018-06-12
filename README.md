@@ -88,6 +88,13 @@ The facade **\Oauth2** provides all helpers needed to get and post data from the
 ```
 
 ```php
+@method \Oauth2::getUserProfiles(): array
+@api GET '/api/{version}/profile'
+
+@return array With logged user profiles
+```
+
+```php
 @method \Oauth2::getUserByCpf(string $cpf): array
 @api POST '/api/{version}/user/cpf'
 

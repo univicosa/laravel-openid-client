@@ -75,6 +75,16 @@ class Api
     }
 
     /**
+     * @api GET '/api/{version}/user/level'
+     *
+     * @return array With the max level permission the user have in logged system
+     */
+    public static function getUserLevel()
+    {
+        return self::getResponse('user/level');
+    }
+
+    /**
      * @api POST '/api/{version}/user/cpf'
      *
      * @param string $cpf

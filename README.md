@@ -130,6 +130,13 @@ The facade **\Oauth2** provides all helpers needed to get and post data from the
 ```
 
 ```php
+@method \Oauth2::isAddressFilled(): array
+@api GET '/api/{version}/address/filled'
+
+@return array With the Boolean response if the user address data is populated on the Oauth Server
+```
+
+```php
 @method \Oauth2::getStates(): array
 @api GET '/api/{version}/address/states'
 

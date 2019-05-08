@@ -71,11 +71,9 @@ class UserSystemsComposer
     private function systems(): array
     {
         if (!\Session::has('systems') && Auth::check()) {
-            \Session::put(\Oauth2::getSystems());
+            \Session::put(\Oauth2::getUserSystems());
         }
 
         return \Session::get('systems');
     }
-
-
 }

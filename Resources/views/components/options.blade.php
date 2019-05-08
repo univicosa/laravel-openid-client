@@ -97,17 +97,6 @@
                         <li class="m-nav__separator m-nav__separator--fit"></li>
 
                         <li class="m-nav__item">
-                            <a href="https://univicosa.tomticket.com/chat/geral?id=EP07673" class="m-nav__link" target="_blank">
-                                <i class="m-nav__link-icon flaticon-info"></i>
-                                <span class="m-nav__link-text">
-                                    {{ __('openid::options.support') }}
-                                </span>
-                            </a>
-                        </li>
-
-                        <li class="m-nav__separator m-nav__separator--fit"></li>
-
-                        <li class="m-nav__item">
                             <form action="{{ $logout }}" method="POST">
                                 <button class="btn btn-outline-danger m-btn m-btn--pill m-btn--wide">
                                     {{ __('openid::options.logout') }}

@@ -33,17 +33,37 @@ Your system need the `oauth public key` to connect and communicate with the Oaut
 In the file `app\Exceptions\Handler.php` find or overwrite the `unauthenticated` method and change the redirect route to:
 
 ```php
-config('openid.server') . '/login?continue=' . env('APP_URL')
+protected function unauthenticated($request, AuthenticationException $exception) : \Illuminate\Http\RedirectResponse
+{
+     if ($request->expectsJson()) {
+         return response()->json(['error' => 'Unauthenticated.'], 401);
+     }
+     
+     if (env('APP_ENV') === 'local') {
+         return redirect()->guest(route('login'));
+     }
+
+     return redirect()->guest(config('openid.server') . '/login?continue=' . $request->url());
+}
 ```
 
-### _Session Lifetime_
+### .env File
 
 Set a variable called `SESSION_LIFETIME` in the `.env` file and define it to the time in minutes you want to keep the logged session. The max time of the Oauth Server keeps the session is 240 minutes (4 hours).
 
 ```php
+#### APP CONFIG ####
+APP_URL=url-project (https://domain.com)
+
+#### CACHE CONFIG ####
 CACHE_DRIVER=redis
 SESSION_DRIVER=redis
 SESSION_LIFETIME=240
+
+#### OAUTH OPENID ####
+AUTH_SERVER=https://oauth.univicosa.com.br or https://devauth.univicosa.com.br
+CLIENT_ID=you-client-id
+CLIENT_SECRET=your-secret-code
 ```
 
 ### Change Kernel.php

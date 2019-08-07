@@ -40,6 +40,21 @@ config('openid.server') . '/login?continue=' . env('APP_URL')
 
 Set a variable called `SESSION_LIFETIME` in the `.env` file and define it to the time in minutes you want to keep the logged session. The max time of the Oauth Server keeps the session is 240 minutes (4 hours).
 
+```php
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+SESSION_LIFETIME=240
+```
+
+### Change Kernel.php
+In file *app/Http/Kernel.php** change the attribute $routeMiddleware
+
+```php
+   protected $routeMiddleware = [
+        'auth' => \Illuminate\Auth\Middleware\Authenticate::class // CHANGE THIS
+    ]; 
+```
+
 ### For change the _Guard_
 
 change the file `config\auth.php` to:

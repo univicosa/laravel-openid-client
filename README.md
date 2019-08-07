@@ -50,9 +50,9 @@ SESSION_LIFETIME=240
 In file *app/Http/Kernel.php** change the attribute $routeMiddleware
 
 ```php
-   protected $routeMiddleware = [
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class // CHANGE THIS
-    ]; 
+protected $routeMiddleware = [
+   'auth' => \Illuminate\Auth\Middleware\Authenticate::class // CHANGE THIS
+]; 
 ```
 
 ### For change the _Guard_

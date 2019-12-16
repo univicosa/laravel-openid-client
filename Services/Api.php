@@ -55,6 +55,16 @@ class Api
     }
 
     /**
+     * @api GET '/api/{version}/system/permissions'
+     *
+     * @return array With System givable permissions
+     */
+    public static function getSystemPermissions()
+    {
+        return self::getResponse('system/permissions');
+    }
+
+    /**
      * @api GET '/api/{version}/user'
      *
      * @return array With logged user data

@@ -102,24 +102,24 @@ The facade **\Oauth2** provides all helpers needed to get and post data from the
 ### \Ouath2 methods available
 
 ```php
-@method \Oauth2::show(): array
+@method \Oauth2::getSystems(): array
 @api GET '/api/{version}/system'
 
 @return array With Systems available in Oauth Server
 ```
 
 ```php
-@method \Oauth2::systemRoles(): array
+@method \Oauth2::getSystemRoles(): array
 @api GET '/api/{version}/system/roles'
 
 @return array With System givable roles
 ```
 
 ```php
-@method \Oauth2::systemPermissions(): array
+@method \Oauth2::getSystemPermissions(): array
 @api GET '/api/{version}/system/permissions'
 
-@return array With System givable roles
+@return array With System givable permissions
 ```
 
 

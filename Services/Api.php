@@ -137,6 +137,20 @@ class Api
     }
 
     /**
+     * @param string $permission_id
+     *
+     * @return array
+     */
+    public static function removeUserPermission(string $permission_id)
+    {
+        $params = [
+            'permission' => $permission_id
+        ];
+
+        return self::postData('user/remove/permission', $params);
+    }
+
+    /**
      * @api POST '/api/{version}/user/permission'
      *
      * @param string $cpf

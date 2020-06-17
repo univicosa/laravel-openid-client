@@ -242,7 +242,7 @@ class Api
     {
         $params = array_only($data, ['cpf', 'name']);
 
-        return self::postData('username', $params);
+        return self::postData('user/update/username', $params);
     }
 
     /**

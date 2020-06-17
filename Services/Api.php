@@ -232,6 +232,20 @@ class Api
     }
 
     /**
+     * @api POST '/api/{version}/username'
+     *
+     * @param array $data Requires 'cpf' and 'name' keys
+     *
+     * @return array with the response of Post action
+     */
+    public static function setUsername(array $data)
+    {
+        $params = array_only($data, ['cpf', 'name']);
+
+        return self::postData('username', $params);
+    }
+
+    /**
      * @param string $uri
      * @param array  $params
      *

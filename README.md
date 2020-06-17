@@ -56,9 +56,15 @@ Set a variable called `SESSION_LIFETIME` in the `.env` file and define it to the
 APP_URL=url-project (https://domain.com)
 
 #### CACHE CONFIG ####
+BROADCAST_DRIVER=log
 CACHE_DRIVER=redis
-SESSION_DRIVER=redis
+SESSION_DRIVER=file
 SESSION_LIFETIME=240
+QUEUE_DRIVER=sync
+
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
 
 #### OAUTH OPENID ####
 AUTH_SERVER=https://oauth.univicosa.com.br or https://devauth.univicosa.com.br
@@ -203,6 +209,13 @@ The facade **\Oauth2** provides all helpers needed to get and post data from the
 ```php
 @method \Oauth2::setProfile(array $data): array
 @api POST '/api/{version}/profile'
+
+@return array with the response of Post action
+```
+
+```php
+@method \Oauth2::setUsername(array $data): array
+@api POST '/api/{version}/username'
 
 @return array with the response of Post action
 ```

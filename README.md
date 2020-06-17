@@ -215,7 +215,7 @@ The facade **\Oauth2** provides all helpers needed to get and post data from the
 
 ```php
 @method \Oauth2::setUsername(array $data): array
-@api POST '/api/{version}/username'
+@api POST '/api/{version}/user/update/username'
 
 @return array with the response of Post action
 ```

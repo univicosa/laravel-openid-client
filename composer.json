@@ -2,7 +2,7 @@
   "name": "univicosa/laravel-openid-client",
   "license": "MIT",
   "description": "OpenId client for the Univiçosa authenticated projects.",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "authors": [
     {
       "name": "Felipe da Silva Pinheiro",

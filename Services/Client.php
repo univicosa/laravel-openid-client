@@ -41,7 +41,7 @@ class Client
     public static function createUser(array $data): array
     {
         $client = self::getServerClient();
-        $params = array_only($data, ['name', 'email', 'cpf']);
+        $params = array_only($data, ['name', 'email', 'cpf', 'setProfile']);
 
         $response = $client->post('api/' . config('openid.api-version') . '/user', [
             'form_params' => $params,

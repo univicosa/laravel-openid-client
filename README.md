@@ -220,6 +220,13 @@ The facade **\Oauth2** provides all helpers needed to get and post data from the
 @return array with the response of Post action
 ```
 
+```php
+@method \Oauth2::getUsersType(string $type): array
+@api POST '/api/{version}/profile/users/type'
+
+@return array With all user data available for a type selected on the Oauth server
+```
+
 ## _View components_
 
 `@openidComponents`:

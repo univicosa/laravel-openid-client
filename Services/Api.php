@@ -137,6 +137,16 @@ class Api
     }
 
     /**
+     * @api GET '/api/{version}/profile/users/type'
+     *
+     * @return array With all user data available for a type selected on the Oauth server
+     */
+    public static function getUsersType(string $type)
+    {
+        return self::getResponse('profile/users/type', ['type' => $type]);
+    }
+
+    /**
      * @param string $permission_id
      *
      * @return array

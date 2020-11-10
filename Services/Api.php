@@ -147,6 +147,34 @@ class Api
     }
 
     /**
+     * @api POST '/api/{version}/profile/create/usertype'
+     *
+     * @param array $data Requires 'cpf', 'type', 'registration', 'courseId' keys
+     *
+     * @return array with the response of Post action
+     */
+    public static function setUsersType(array $data)
+    {
+        $params = array_only($data, ['cpf', 'type', 'registry', 'courseId']);
+
+        return self::postData('profile/create/usertype', $params);
+    }
+
+    /**
+     * @api POST '/api/{version}/profile/remove/usertype'
+     *
+     * @param array $data Requires 'cpf', 'type' keys
+     *
+     * @return array with the response of Post action
+     */
+    public static function removeUsersType(array $data)
+    {
+        $params = array_only($data, ['cpf', 'type']);
+
+        return self::postData('profile/remove/usertype', $params);
+    }
+
+    /**
      * @param string $permission_id
      *
      * @return array

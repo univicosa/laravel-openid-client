@@ -235,7 +235,7 @@ The facade **\Oauth2** provides all helpers needed to get and post data from the
 ```
 
 ```php
-@method \Oauth2::removeUsersType(array $data): array
+@method \Oauth2::removeAllTypesFromUser(array $data): array
 @api POST '/api/{version}/profile/remove/usertype'
 
 @return array with the response of Post action

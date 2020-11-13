@@ -167,7 +167,7 @@ class Api
      *
      * @return array with the response of Post action
      */
-    public static function removeUsersType(array $data)
+    public static function removeAllTypesFromUser(array $data)
     {
         $params = array_only($data, ['cpf', 'type']);
 

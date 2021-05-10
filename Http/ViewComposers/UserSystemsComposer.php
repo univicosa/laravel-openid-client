@@ -38,8 +38,14 @@ class UserSystemsComposer
      */
     private function name($first = FALSE): string
     {
+        $user = \Oauth2::getUser()["user"];
+
+        if ($user['social_name']) {
+            return $user['social_name'];
+        }
+
         $name = isset(\Auth::user()->name) ? \Auth::user()->name : 'John Doe';
-        
+
         if ($first) return explode(' ', $name)[0];
 
         return $name;

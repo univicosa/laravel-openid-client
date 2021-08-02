@@ -19,6 +19,8 @@ class OpenIdController extends Controller
      */
     public function callback(Request $request)
     {
+        $continue = $request->get('continue',null);
+
         if ($request->has('error')) {
             switch ($request->get('error')) {
                 case 'access_denied':

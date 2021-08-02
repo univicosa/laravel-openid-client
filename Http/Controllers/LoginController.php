@@ -4,6 +4,7 @@ namespace Modules\OpenId\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 
 class LoginController extends Controller
@@ -14,6 +15,7 @@ class LoginController extends Controller
     public function login()
     {
         $query = http_build_query([
+            'continue'      => Input::get('continue'),
             'client_id'     => config('openid.client.id'),
             'redirect_uri'  => route('openid.callback'),
             'response_type' => 'code',

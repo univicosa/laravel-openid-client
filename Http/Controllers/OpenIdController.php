@@ -71,7 +71,7 @@ class OpenIdController extends Controller
             abort($exception->getCode() !== 0 ? $exception->getCode() : 500);
         }
 
-        return redirect()->intended();
+        return redirect()->intended(parse_url($continue)['path']);
     }
 
     /**

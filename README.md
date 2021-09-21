@@ -151,6 +151,13 @@ The facade **\Oauth2** provides all helpers needed to get and post data from the
 ```
 
 ```php
+@method \Oauth2::searchUserByName(string $name): array
+@api POST '/api/{version}/user/name'
+
+@return array With the data of user owner of document given
+```
+
+```php
 @method \Oauth2::getUserSystems(): array
 @api GET '/api/{version}/user/systems'
 

@@ -107,6 +107,18 @@ class Api
     }
 
     /**
+     * @api POST '/api/{version}/user/name'
+     *
+     * @param string $name
+     *
+     * @return array With the data of user owner of document given
+     */
+    public static function searchUserByName(string $name): array
+    {
+        return self::getResponse('user/name', ['name' => $name]);
+    }
+
+    /**
      * @api GET '/api/{version}/user/systems'
      *
      * @return array With the systems that the user is allowed to access

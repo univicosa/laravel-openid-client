@@ -107,6 +107,19 @@ class Api
     }
 
     /**
+     * @api POST '/api/{version}/user/search/cpf'
+     *
+     * @param array $cpf
+     * limit array size to 100 items
+     *
+     * @return array With the data of users owner of document given
+     */
+    public static function getUsersByCpf(array $cpf)
+    {
+        return self::getResponse('user/search/cpf', ['cpf' => $cpf]);
+    }
+
+    /**
      * @api POST '/api/{version}/user/name'
      *
      * @param string $name

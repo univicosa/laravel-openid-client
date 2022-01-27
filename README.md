@@ -151,10 +151,17 @@ The facade **\Oauth2** provides all helpers needed to get and post data from the
 ```
 
 ```php
+@method \Oauth2::getUsersByCpf(array $cpf): array
+@api POST '/api/{version}/user/search/cpf'
+
+@return array With the data of user owner of document given: limit array size to 100 items
+```
+
+```php
 @method \Oauth2::searchUserByName(string $name): array
 @api POST '/api/{version}/user/name'
 
-@return array With the data of user owner of document given
+@return array With the data of users owner of document given
 ```
 
 ```php

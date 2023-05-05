@@ -131,6 +131,19 @@ class Api
         return self::getResponse('user/name', ['name' => $name]);
     }
 
+
+    /**
+     * @api POST '/api/{version}/user/registry'
+     *
+     * @param string $registry
+     *
+     * @return array With the data of user owner of registry given
+     */
+    public static function searchUserByRegistry(string $registry): array
+    {
+        return self::getResponse('user/registry', ['registry' => $registry]);
+    }
+
     /**
      * @api GET '/api/{version}/user/systems'
      *

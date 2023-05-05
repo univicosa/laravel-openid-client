@@ -165,6 +165,14 @@ The facade **\Oauth2** provides all helpers needed to get and post data from the
 ```
 
 ```php
+@method \Oauth2::searchUserByRegistry(string $registry): array
+@api POST '/api/{version}/user/registry'
+
+@return array With the data of users owner of registry given
+```
+
+
+```php
 @method \Oauth2::getUserSystems(): array
 @api GET '/api/{version}/user/systems'
 

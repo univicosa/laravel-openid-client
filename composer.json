@@ -2,7 +2,7 @@
   "name": "univicosa/laravel-openid-client",
   "license": "MIT",
   "description": "OpenId client for the Univiçosa authenticated projects.",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "authors": [
     {
       "name": "Felipe da Silva Pinheiro",
@@ -15,6 +15,10 @@
     {
       "name": "Vinício Fragoso Mendes",
       "email": "vinicio@univicosa.com.br"
+    },
+    {
+      "name": "Igor de Oliveira Lopes",
+      "email": "igorlopes@univicosa.com.br"
     }
   ],
   "require": {

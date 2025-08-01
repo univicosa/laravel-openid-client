@@ -6,6 +6,9 @@
  */
 
 namespace Modules\OpenId\Services;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Modules\Exceptions\Unauthenticated;
 
 class Api
 {
@@ -321,18 +324,30 @@ class Api
         return self::postData('user/update/username', $params);
     }
 
+    
     /**
      * @param string $uri
      * @param array  $params
      *
      * @return array
      */
+
     private static function getResponse(string $uri, array $params = []): array
     {
         self::initialize();
 
         if (empty($params)) {
-            $response = self::$client->get('api/' . self::$version . '/' . $uri);
+
+          
+
+           $response =  self::$client->request('GET', 'api/' . self::$version . '/' . $uri, ['http_errors' => false]);
+           if($response->getStatusCode() !== 200){
+                   throw new AuthenticationException();
+           }
+
+           
+
+
         } else {
             $response = self::$client->post('api/' . self::$version . '/' . $uri, [
                 'form_params' => $params,

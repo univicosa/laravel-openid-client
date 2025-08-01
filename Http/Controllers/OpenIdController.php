@@ -19,7 +19,8 @@ class OpenIdController extends Controller
      */
     public function callback(Request $request)
     {
-        $continue = $request->get('continue',null);
+        $continue = $request->get('continue', null);
+        echo "continue ====>" , parse_url($continue)['path'], PHP_EOL;
 
         if ($request->has('error')) {
             switch ($request->get('error')) {
@@ -41,6 +42,8 @@ class OpenIdController extends Controller
         }
 
         $code = $request->get('code');
+
+
         $http = new Client();
 
         try {
@@ -58,6 +61,7 @@ class OpenIdController extends Controller
             $response = json_decode($response->getBody());
 
             session([
+                
                 'openid_token'  => $response->id_token,
                 'access_token'  => $response->access_token,
                 'refresh_token' => $response->refresh_token,
@@ -90,7 +94,9 @@ class OpenIdController extends Controller
                 case 'unsupported_grant_type':
                 case 'invalid_scope':
                 default:
+
                     abort($response->getStatusCode());
+                    //redirect()->to("login");
                     break;
             }
         }

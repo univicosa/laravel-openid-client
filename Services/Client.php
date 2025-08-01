@@ -14,6 +14,7 @@ class Client
             'headers'  => [
                 'Authorization' => 'Bearer ' . session('access_token'),
                 'Accept'        => 'application/json',
+                
             ],
         ]);
     }
@@ -43,6 +44,8 @@ class Client
         $client = self::getServerClient();
         $params = array_only($data, ['name', 'email', 'cpf', 'setProfile']);
 
+
+        
         $response = $client->post('api/' . config('openid.api-version') . '/user', [
             'form_params' => $params,
         ]);

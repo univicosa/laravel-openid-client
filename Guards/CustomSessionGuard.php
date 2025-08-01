@@ -3,6 +3,8 @@
 namespace Modules\OpenId\Guards;
 
 use Carbon\Carbon;
+use DateInterval;
+use Exception;
 use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
@@ -15,13 +17,24 @@ use Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Support\Traits\Macroable;
-use Lcobucci\JWT\Parser;
-use Lcobucci\JWT\Signer\Key;
-use Lcobucci\JWT\Signer\Rsa\Sha256;
-use Lcobucci\JWT\ValidationData;
+use Lcobucci\JWT\Token\Parser;
 use Modules\OpenId\Entities\User;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
+use Lcobucci\JWT\Encoding\JoseEncoder;
+use Lcobucci\JWT\Validation\Constraint\RelatedTo;
+use Lcobucci\JWT\Validation\Constraint\SignedWith;
+use Lcobucci\JWT\Validation\Validator;
+use Lcobucci\JWT\Validation\Constraint\IssuedBy;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer;
+use Lcobucci\JWT\Validation\Constraint\HasClaim;
+use Lcobucci\JWT\Validation\Constraint\LooseValidAt;
+use Lcobucci\JWT\Validation\Constraint\StrictValidAt;
+use Lcobucci\Clock\Clock;
+use Lcobucci\Clock\SystemClock;
+
+use Lcobucci\JWT\Signer\Key\InMemory;
 
 class CustomSessionGuard implements Guard
 {
@@ -89,9 +102,10 @@ class CustomSessionGuard implements Guard
      * @param  \Illuminate\Contracts\Session\Session     $session
      * @param  \Symfony\Component\HttpFoundation\Request $request
      */
-    public function __construct(Session $session,
-                                Request $request = NULL)
-    {
+    public function __construct(
+        Session $session,
+        Request $request = NULL
+    ) {
         $this->session = $session;
         $this->request = $request;
         $this->provider = NULL;
@@ -107,6 +121,7 @@ class CustomSessionGuard implements Guard
         if ($this->loggedOut) {
             return NULL;
         }
+
         // If we've already retrieved the user for the current request we can just
         // return it back immediately. We do not want to fetch the user data on
         // every call to this method because that would be tremendously slow.
@@ -117,40 +132,49 @@ class CustomSessionGuard implements Guard
                 return NULL;
             }
 
+
             return $this->user;
         }
+
+
         // First we will try to load the user using the identifier in the session if
         // one exists. Otherwise we will check for a "remember me" cookie in this
         // request, and if one exists, attempt to retrieve the user using that.
         $id = $this->session->get($this->getName());
         $user = NULL;
+
         if (!is_null($id)) {
+
             $token = $this->validateToken($id);
+
+
             if (!$token) {
                 return NULL;
             }
             $user = new User();
-            if ($token->hasClaim('sub')) {
-                $user->id = $token->getClaim('sub');
+            if ($token->claims()->get('sub') !== null) {
+                $user->id = $token->claims()->get('sub');
             }
-            if ($token->hasClaim('name')) {
-                $user->name = $token->getClaim('name');
+            if ($token->claims()->get('name') !== null) {
+                $user->name = $token->claims()->get('name');
             }
-            if ($token->hasClaim('email')) {
-                $user->email = $token->getClaim('email');
+            if ($token->claims()->get('email') !== null) {
+                $user->email = $token->claims()->get('email');
             }
-            if ($token->hasClaim('roles')) {
-                $user->roles = explode(' ', $token->getClaim('roles'));
+            if ($token->claims()->get('roles') !== null) {
+                $user->roles = explode(' ', $token->claims()->get('roles'));
             }
-            if ($token->hasClaim('registries')) {
-                $user->registries = explode(' ', $token->getClaim('registries'));
+            if ($token->claims()->get('registries') !== null) {
+                $user->registries = explode(' ', $token->claims()->get('registries'));
             }
-            if ($token->hasClaim('cpf')) {
-                $user->cpf = $token->getClaim('cpf');
+            if ($token->claims()->get('cpf') !== null) {
+                $user->cpf = $token->claims()->get('cpf');
             }
-            if ($token->hasClaim('avatar')) {
-                $user->avatar = $token->getClaim('avatar');
+            if ($token->claims()->get('avatar') !== null) {
+                $user->avatar = $token->claims()->get('avatar');
             }
+
+
             if ($user) {
                 $this->fireAuthenticatedEvent($user);
             }
@@ -166,23 +190,55 @@ class CustomSessionGuard implements Guard
      */
     public function validateToken(string $id)
     {
-        $token = (new Parser())->parse((string)$id);
-        //Verifica se o token expirou
-        if ($token->isExpired()) {
+
+        try {
+
+
+            $parser = new Parser(new JoseEncoder());
+            $token = $parser->parse((string)$id);
+
+            /* echo var_dump($token->claims());
+        echo $token->claims()->get('sub'), PHP_EOL; // will print "1234567890"
+*/
+            //Verifica se o token expirou
+            /*if ($token->isExpired()) {
             return NULL;
-        }
-        //Verifica a assinatura
-        $signer = new Sha256();
-        $key = new Key('file://' . config('openid.key'));
-        if (!$token->verify($signer, $key)) {
-            return NULL;
-        }
-        //Verifica os dados
-        $validation = new ValidationData();
+        }*/
+            //Verifica a assinatura
+
+            //  $key = new Key('file://' . config('openid.key'));
+
+
+
+            $validator = new Validator();
+
+            if (!$validator->validate($token, new SignedWith(new Signer\Rsa\Sha256(),  InMemory::file(config('openid.key'))))) {
+                \Log::alert("token signed with eerror");
+                echo 'token signed with eerror!', PHP_EOL; // will print this
+                return NULL;
+            }
+            if (!$validator->validate($token, new IssuedBy(config('openid.server')))) {
+                echo 'Invalid token (2)!', PHP_EOL; // will print this
+                return NULL;
+            }
+
+            $clock = SystemClock::fromUTC();
+            if (!$validator->validate($token, new StrictValidAt($clock))) {
+                echo 'TOKEN EXPIRADO!', PHP_EOL; // will print this
+                return NULL;
+            }
+
+            //Verifica os dados
+            /*$validation = new ValidationData();
         $validation->setIssuer(config('openid.server'));
         $validation->setAudience(config('openid.client.id'));
-        if (!$token->validate($validation)) {
+        */
+            /*if (!$token->validate($validation)) {
             return NULL;
+        }*/
+        } catch (Exception $e) {
+            throw $e;
+            return null;
         }
 
         return $token;
@@ -228,6 +284,8 @@ class CustomSessionGuard implements Guard
         // If we have an event dispatcher instance, we can fire off the logout event
         // so any further processing can be done. This allows the developer to be
         // listening for anytime a user signs out of this application manually.
+    
+
         $this->clearUserDataFromStorage();
         if (isset($this->events)) {
             $this->events->dispatch(new Logout($user));
@@ -273,6 +331,7 @@ class CustomSessionGuard implements Guard
      */
     protected function fireAuthenticatedEvent($user)
     {
+
         if (isset($this->events)) {
             $this->events->dispatch(new Authenticated($user));
         }

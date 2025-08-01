@@ -17,4 +17,5 @@ return [
     'change_password' => 'Trocar senha',
     'support'         => 'Suporte Online',
     'logout'          => 'Sair',
+    'dark_mode'       => 'Modo escuro'
 ];
